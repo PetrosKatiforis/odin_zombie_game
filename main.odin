@@ -41,6 +41,7 @@ Context :: struct {
     zombie_positions: [dynamic]engine.Vector2f,
 
     brain: engine.Sprite,
+    brain_collision: sdl.Rect,
     gun_target: engine.Sprite,
     grass_sprite: engine.Sprite,
     grass_rects: [GRASS_SPRITES]sdl.Rect,
@@ -142,6 +143,9 @@ initialize_context :: proc () {
     ctx.brain = engine.create_sprite(ctx.game.renderer, "res/textures/brain.png", 2)
     engine.set_sprite_x(&ctx.brain, f64(ctx.game.width - ctx.brain.transform.w) / 2)
     engine.set_sprite_y(&ctx.brain, f64(ctx.game.height - ctx.brain.transform.h) / 2)
+    
+    // Hard-coded brain collision shape
+    ctx.brain_collision = sdl.Rect{ctx.brain.transform.x + 5, ctx.brain.transform.y + 10, ctx.brain.transform.w - 5, ctx.brain.transform.h - 35}
 
     ctx.base_zombie_sprite = engine.create_sprite(ctx.game.renderer, "res/textures/zombie.png", 2)
     ctx.gun_target = engine.create_sprite(ctx.game.renderer, "res/textures/gun.png", 2)
@@ -291,7 +295,7 @@ main :: proc () {
             zombie_rect := sdl.Rect{i32(pos.x), i32(pos.y), ctx.base_zombie_sprite.transform.w, ctx.base_zombie_sprite.transform.h}
 
             // Check if any zombie has reached the brain
-            if !ctx.is_paused && sdl.HasIntersection(&zombie_rect, &ctx.brain.transform) {
+            if !ctx.is_paused && sdl.HasIntersection(&zombie_rect, &ctx.brain_collision) {
                 // End the game and play the lose screen
                 ctx.is_paused = true
                 ctx.lose_animation.is_active = true
