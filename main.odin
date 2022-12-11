@@ -29,7 +29,7 @@ Context :: struct {
 
     current_wave: u32,
     spawn_timer: u32,
-    // These values will change depending on the wave's diffuculty
+    // These values will change depending on the wave's difficulty
     zombie_speed: f64,
     total_wave_zombies: u32,
     zombies_to_spawn: u32,
